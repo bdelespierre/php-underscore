@@ -1,2 +1,4 @@
 test.php
 *.sublime-*
+vendor/
+composer.lock
