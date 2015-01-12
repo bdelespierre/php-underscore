@@ -3,20 +3,21 @@
     "type": "library",
     "description": "Underscore.js port in PHP",
     "keywords": ["php", "js", "underscore", "utility"],
+    "homepage": "https://github.com/bdelespierre/underscore.php",
     "license": "LGPL",
     "authors": [
-        { "name": "Benjamin Delespierre", "email": "benjamin.delespierre@gmail.com" }
+        {
+            "name": "Benjamin Delespierre",
+            "email": "benjamin.delespierre@gmail.com"
+        }
     ],
     "require": {
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "atoum/atoum": "dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "Underscore": "lib/",
-            "Chain": "lib/"
-        }
+        "psr-0": { "Underscore": "src/" }
     }
 }
