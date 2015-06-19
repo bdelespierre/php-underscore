@@ -498,7 +498,7 @@ function _result($object, $property)
 
 function _template($templateString, $data=[], $settings=[])
 {
-	return Underscore::template($templateString, $data=[], $settings=[]);
+	return Underscore::template($templateString, $data, $settings);
 }
 
 function _chain($object)
