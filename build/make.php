@@ -103,8 +103,9 @@ function _getMethods()
 			return $method->isPublic;
 		})
 		->invoke(function () use ($examples) {
-			$this->argumentsAsString      = implode(', ', _::pluck($this->parameters, 'asString'));
-			$this->argumentsAsStringNoRef = implode(', ', _::pluck($this->parameters, 'asStringNoRef'));
+			$this->argumentsAsString             = implode(', ', _::pluck($this->parameters, 'asString'));
+			$this->argumentsAsStringNoRef        = implode(', ', _::pluck($this->parameters, 'asStringNoRef'));
+			$this->argumentsAsStringNoRefNoValue = implode(', ', _::pluck($this->parameters, 'asStringNoRefNoValue'));
 			$this->examples = (array)_::get($examples, $this->name, []);
 		})
 		->tap(function (& $methods) {
@@ -152,9 +153,10 @@ function _getParameters(ReflectionMethod $method)
 			];
 		})
 		->invoke(function () {
-			$this->asStringNoRef = "\${$this->name}" . ($this->hasDefaultValue ? "={$this->default}" : '');
-			$this->asString      = ($this->isReference ? '&' : '') . "\${$this->name}" .
-							       ($this->hasDefaultValue ? "={$this->default}" : '');
+			$this->asStringNoRefNoValue = "\${$this->name}";
+			$this->asStringNoRef        = "\${$this->name}" . ($this->hasDefaultValue ? "={$this->default}" : '');
+			$this->asString             = ($this->isReference ? '&' : '') . "\${$this->name}" .
+										  ($this->hasDefaultValue ? "={$this->default}" : '');
 		})
 		->indexBy('name')
 		->value();

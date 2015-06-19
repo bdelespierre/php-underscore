@@ -27,7 +27,7 @@ EOF;
 $template['functions']['function'] = <<< EOF
 function _<%=\$function->name%>(<%=\$function->argumentsAsString%>)
 {
-	return Underscore::<%=\$function->name%>(<%=\$function->argumentsAsStringNoRef%>);
+	return Underscore::<%=\$function->name%>(<%=\$function->argumentsAsStringNoRefNoValue%>);
 }
 
 

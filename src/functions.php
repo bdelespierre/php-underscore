@@ -6,8 +6,8 @@
 // \____/_/ /_/\__,_/\___/_/  /____/\___/\____/_/   \___(_) .___/_/ /_/ .___/
 //                                                       /_/         /_/
 //
-// Build Version: 7d23a6b
-// Last Update:   Mon Jan 12 18:01:58 2015 +0100
+// Build Version: f9b328b
+// Last Update:   Mon Jan 12 18:02:16 2015 +0100
 //
 
 require_once __DIR__ . '/Underscore/Underscore.php';
@@ -18,37 +18,37 @@ use Underscore\Bridge;
 
 function _each($list, $iterator, $context=NULL)
 {
-	return Underscore::each($list, $iterator, $context=NULL);
+	return Underscore::each($list, $iterator, $context);
 }
 
 function _eachReference(&$list, $iterator, $context=NULL)
 {
-	return Underscore::eachReference($list, $iterator, $context=NULL);
+	return Underscore::eachReference($list, $iterator, $context);
 }
 
 function _map($list, $iterator, $context=NULL)
 {
-	return Underscore::map($list, $iterator, $context=NULL);
+	return Underscore::map($list, $iterator, $context);
 }
 
 function _reduce($list, $iterator, $memo, $context=NULL)
 {
-	return Underscore::reduce($list, $iterator, $memo, $context=NULL);
+	return Underscore::reduce($list, $iterator, $memo, $context);
 }
 
 function _reduceRight($list, $iterator, $memo, $context=NULL)
 {
-	return Underscore::reduceRight($list, $iterator, $memo, $context=NULL);
+	return Underscore::reduceRight($list, $iterator, $memo, $context);
 }
 
 function _find($list, $iterator, $context=NULL)
 {
-	return Underscore::find($list, $iterator, $context=NULL);
+	return Underscore::find($list, $iterator, $context);
 }
 
 function _filter($list, $iterator=NULL, $context=NULL)
 {
-	return Underscore::filter($list, $iterator=NULL, $context=NULL);
+	return Underscore::filter($list, $iterator, $context);
 }
 
 function _where($list, $properties)
@@ -63,27 +63,27 @@ function _findWhere($list, $properties)
 
 function _reject($list, $iterator, $context=NULL)
 {
-	return Underscore::reject($list, $iterator, $context=NULL);
+	return Underscore::reject($list, $iterator, $context);
 }
 
 function _every($list, $iterator=NULL, $context=NULL)
 {
-	return Underscore::every($list, $iterator=NULL, $context=NULL);
+	return Underscore::every($list, $iterator, $context);
 }
 
 function _some($list, $iterator=NULL, $context=NULL)
 {
-	return Underscore::some($list, $iterator=NULL, $context=NULL);
+	return Underscore::some($list, $iterator, $context);
 }
 
 function _contains($list, $value, $strict=false)
 {
-	return Underscore::contains($list, $value, $strict=false);
+	return Underscore::contains($list, $value, $strict);
 }
 
 function _invoke($list, $methodName, $arguments=[])
 {
-	return Underscore::invoke($list, $methodName, $arguments=[]);
+	return Underscore::invoke($list, $methodName, $arguments);
 }
 
 function _pluck($list, $propertyName)
@@ -93,32 +93,32 @@ function _pluck($list, $propertyName)
 
 function _max($list, $iterator=NULL, $context=NULL)
 {
-	return Underscore::max($list, $iterator=NULL, $context=NULL);
+	return Underscore::max($list, $iterator, $context);
 }
 
 function _min($list, $iterator=NULL, $context=NULL)
 {
-	return Underscore::min($list, $iterator=NULL, $context=NULL);
+	return Underscore::min($list, $iterator, $context);
 }
 
 function _sortBy($list, $iterator, $context=NULL)
 {
-	return Underscore::sortBy($list, $iterator, $context=NULL);
+	return Underscore::sortBy($list, $iterator, $context);
 }
 
 function _indexBy($list, $iterator, $context=NULL)
 {
-	return Underscore::indexBy($list, $iterator, $context=NULL);
+	return Underscore::indexBy($list, $iterator, $context);
 }
 
 function _groupBy($list, $iterator, $context=NULL)
 {
-	return Underscore::groupBy($list, $iterator, $context=NULL);
+	return Underscore::groupBy($list, $iterator, $context);
 }
 
 function _countBy($list, $iterator, $context=NULL)
 {
-	return Underscore::countBy($list, $iterator, $context=NULL);
+	return Underscore::countBy($list, $iterator, $context);
 }
 
 function _shuffle($list)
@@ -128,7 +128,7 @@ function _shuffle($list)
 
 function _sample($list, $n=1)
 {
-	return Underscore::sample($list, $n=1);
+	return Underscore::sample($list, $n);
 }
 
 function _toArray($list)
@@ -143,27 +143,27 @@ function _size($list)
 
 function _partition($list, $iterator, $context=NULL)
 {
-	return Underscore::partition($list, $iterator, $context=NULL);
+	return Underscore::partition($list, $iterator, $context);
 }
 
 function _first($array, $n=1, $guard=false)
 {
-	return Underscore::first($array, $n=1, $guard=false);
+	return Underscore::first($array, $n, $guard);
 }
 
 function _initial($array, $n=1, $guard=false)
 {
-	return Underscore::initial($array, $n=1, $guard=false);
+	return Underscore::initial($array, $n, $guard);
 }
 
 function _last($array, $n=1, $guard=false)
 {
-	return Underscore::last($array, $n=1, $guard=false);
+	return Underscore::last($array, $n, $guard);
 }
 
 function _rest($array, $index=1, $guard=false)
 {
-	return Underscore::rest($array, $index=1, $guard=false);
+	return Underscore::rest($array, $index, $guard);
 }
 
 function _compact($array)
@@ -173,7 +173,7 @@ function _compact($array)
 
 function _flatten($array, $shallow=false)
 {
-	return Underscore::flatten($array, $shallow=false);
+	return Underscore::flatten($array, $shallow);
 }
 
 function _without($array, $values)
@@ -183,7 +183,7 @@ function _without($array, $values)
 
 function _uniq($array, $isSorted=false, $iterator=NULL, $context=NULL)
 {
-	return Underscore::uniq($array, $isSorted=false, $iterator=NULL, $context=NULL);
+	return Underscore::uniq($array, $isSorted, $iterator, $context);
 }
 
 function _union()
@@ -208,7 +208,7 @@ function _zip()
 
 function _obj($list, $values=NULL)
 {
-	return Underscore::obj($list, $values=NULL);
+	return Underscore::obj($list, $values);
 }
 
 function _indexOf($array, $item)
@@ -223,12 +223,12 @@ function _lastIndexOf($array, $item)
 
 function _sortedIndex($array, $value, $iterator=NULL, $context=NULL)
 {
-	return Underscore::sortedIndex($array, $value, $iterator=NULL, $context=NULL);
+	return Underscore::sortedIndex($array, $value, $iterator, $context);
 }
 
 function _range($start, $stop=NULL, $step=1)
 {
-	return Underscore::range($start, $stop=NULL, $step=1);
+	return Underscore::range($start, $stop, $step);
 }
 
 function _wrap($function, $wrapper)
@@ -273,7 +273,7 @@ function _bindAll($object, $methodNames)
 
 function _memoize($function, $hashFunction=NULL, &$cache=NULL)
 {
-	return Underscore::memoize($function, $hashFunction=NULL, $cache=NULL);
+	return Underscore::memoize($function, $hashFunction, $cache);
 }
 
 function _throttle($function, $wait)
@@ -343,7 +343,7 @@ function _has($object, $key)
 
 function _get($object, $key, $default=NULL)
 {
-	return Underscore::get($object, $key, $default=NULL);
+	return Underscore::get($object, $key, $default);
 }
 
 function _set(&$object, $key, $value)
@@ -368,7 +368,7 @@ function _isEmpty($object)
 
 function _isArray($object, $native=false)
 {
-	return Underscore::isArray($object, $native=false);
+	return Underscore::isArray($object, $native);
 }
 
 function _isObject($object)
@@ -383,22 +383,22 @@ function _isFunction($object)
 
 function _isNumber($object, $native=false)
 {
-	return Underscore::isNumber($object, $native=false);
+	return Underscore::isNumber($object, $native);
 }
 
 function _isInteger($object, $native=false)
 {
-	return Underscore::isInteger($object, $native=false);
+	return Underscore::isInteger($object, $native);
 }
 
 function _isFloat($object, $native=false)
 {
-	return Underscore::isFloat($object, $native=false);
+	return Underscore::isFloat($object, $native);
 }
 
 function _isString($object, $native=false)
 {
-	return Underscore::isString($object, $native=false);
+	return Underscore::isString($object, $native);
 }
 
 function _isDate($object)
@@ -423,7 +423,7 @@ function _isNaN($object)
 
 function _isBoolean($object, $native=false)
 {
-	return Underscore::isBoolean($object, $native=false);
+	return Underscore::isBoolean($object, $native);
 }
 
 function _isNull($object)
@@ -433,7 +433,7 @@ function _isNull($object)
 
 function _isScalar($object, $native=false)
 {
-	return Underscore::isScalar($object, $native=false);
+	return Underscore::isScalar($object, $native);
 }
 
 function _isTraversable($object)
@@ -448,7 +448,7 @@ function _isResource($object)
 
 function _typeOf($object, $class=true)
 {
-	return Underscore::typeOf($object, $class=true);
+	return Underscore::typeOf($object, $class);
 }
 
 function _identity($value)
@@ -458,12 +458,12 @@ function _identity($value)
 
 function _times($n, $iterator, $context=NULL)
 {
-	return Underscore::times($n, $iterator, $context=NULL);
+	return Underscore::times($n, $iterator, $context);
 }
 
 function _random($min, $max=NULL)
 {
-	return Underscore::random($min, $max=NULL);
+	return Underscore::random($min, $max);
 }
 
 function _mixin($functions)
@@ -478,7 +478,7 @@ function _provide($method)
 
 function _uniqueId($prefix='')
 {
-	return Underscore::uniqueId($prefix='');
+	return Underscore::uniqueId($prefix);
 }
 
 function _escape($string)
@@ -498,7 +498,7 @@ function _result($object, $property)
 
 function _template($templateString, $data=[], $settings=[])
 {
-	return Underscore::template($templateString, $data=[], $settings=[]);
+	return Underscore::template($templateString, $data, $settings);
 }
 
 function _chain($object)
