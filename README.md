@@ -54,11 +54,11 @@ $userConfig = _::extend([],
 1. [Collection Functions](#collection-functions)
    * [each](#each), [eachReference](#eachreference), [map](#map), [reduce](#reduce), [reduceRight](#reduceright), [find](#find), [filter](#filter), [where](#where), [findWhere](#findwhere), [reject](#reject), [every](#every), [some](#some), [contains](#contains), [invoke](#invoke), [pluck](#pluck), [max](#max), [min](#min), [sortBy](#sortby), [indexBy](#indexby), [groupBy](#groupby), [countBy](#countby), [shuffle](#shuffle), [sample](#sample), [toArray](#toarray), [size](#size)
 2. [Uncategorized](#uncategorized)
-   * [partition](#partition)
+   * [partition](#partition), [negate](#negate), [property](#property), [matches](#matches), [constant](#constant), [noop](#noop), [lastly](#lastly), [now](#now), [forge](#forge)
 3. [Array Functions](#array-functions)
    * [first](#first), [initial](#initial), [last](#last), [rest](#rest), [compact](#compact), [flatten](#flatten), [without](#without), [uniq](#uniq), [union](#union), [intersection](#intersection), [difference](#difference), [zip](#zip), [obj](#obj), [indexOf](#indexof), [lastIndexOf](#lastindexof), [sortedIndex](#sortedindex), [range](#range)
 4. [Function (uh, ahem) Functions](#function-uh-ahem-functions)
-   * [wrap](#wrap), [compose](#compose), [after](#after), [once](#once), [partial](#partial), [bind](#bind), [bindClass](#bindclass), [bindAll](#bindall), [memoize](#memoize), [throttle](#throttle)
+   * [wrap](#wrap), [compose](#compose), [after](#after), [before](#before), [once](#once), [partial](#partial), [bind](#bind), [bindClass](#bindclass), [bindAll](#bindall), [memoize](#memoize), [throttle](#throttle)
 5. [Object Functions](#object-functions)
    * [keys](#keys), [values](#values), [pairs](#pairs), [invert](#invert), [functions](#functions), [extend](#extend), [pick](#pick), [omit](#omit), [defaults](#defaults), [duplicate](#duplicate), [tap](#tap), [has](#has), [get](#get), [set](#set), [is](#is), [isEqual](#isequal), [isEmpty](#isempty), [isArray](#isarray), [isObject](#isobject), [isFunction](#isfunction), [isNumber](#isnumber), [isInteger](#isinteger), [isFloat](#isfloat), [isString](#isstring), [isDate](#isdate), [isRegExp](#isregexp), [isFinite](#isfinite), [isNaN](#isnan), [isBoolean](#isboolean), [isNull](#isnull), [isScalar](#isscalar), [isTraversable](#istraversable), [isResource](#isresource), [typeOf](#typeof)
 6. [Utility Functions](#utility-functions)
@@ -937,6 +937,14 @@ _::size($object);
 
 ## Uncategorized
 * [partition](#partition)
+* [negate](#negate)
+* [property](#property)
+* [matches](#matches)
+* [constant](#constant)
+* [noop](#noop)
+* [lastly](#lastly)
+* [now](#now)
+* [forge](#forge)
 
 ### partition
 -----
@@ -963,6 +971,144 @@ _::partition([0, 1, 2, 3, 4, 5], function($num) { return $num % 2 != 0; });
 // => [[1, 3, 5], [0, 2, 4]]
 ?>
 ```
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### negate
+-----
+
+_**Description**_: Returns a new negated version of the predicate function.
+
+##### *Parameters*
+
++ *function*: callable, the function
+
+##### *Prototype*
+
+~~~
+_::negate(function)
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### property
+-----
+
+_**Description**_: Returns a function that will itself return the key property of any passed-in object.
+
+##### *Parameters*
+
++ *key*: string,int, the key or offset to get
+
+##### *Prototype*
+
+~~~
+_::property(key)
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### matches
+-----
+
+_**Description**_: Returns a predicate function that will tell you if a passed in object contains all of the key/value properties present in properties.
+
+##### *Parameters*
+
++ *properties*: traversable, the properties used by predicate
+
+##### *Prototype*
+
+~~~
+_::matches(properties)
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### constant
+-----
+
+_**Description**_: Creates a function that returns the same value that is used as the argument of _::constant.
+
+##### *Parameters*
+
++ *value*: mixed, the value
+
+##### *Prototype*
+
+~~~
+_::constant(value)
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### noop
+-----
+
+_**Description**_: Returns undefined irrespective of the arguments passed to it. Useful as the default for optional callback arguments.
+
+##### *Parameters*
+
+
+##### *Prototype*
+
+~~~
+_::noop()
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### lastly
+-----
+
+_**Description**_: The equivalent of the finally keywork (available since PHP 5.5).
+
+##### *Parameters*
+
++ *function*: callable, a function
++ *finally*: callable,  another function that will *always* be executed after $function
++ *context*: mixed, no description available...
+
+##### *Prototype*
+
+~~~
+_::lastly(function,finally,context)
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### now
+-----
+
+_**Description**_: Returns an integer timestamp for the current time.
+
+##### *Parameters*
+
+
+##### *Prototype*
+
+~~~
+_::now()
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
+
+### forge
+-----
+
+_**Alias**_: strategy
+
+_**Description**_: Create new mixins on runtime. The implementation is based on Bob Weinand's idea of Scala traits implementation in PHP (see it here https://gist.github.com/bwoebi/7319798). This method decomposes the $classname to create a new class, using '\with' as a separator for traits.
+
+##### *Parameters*
+
++ *classname*: string, the class to forge
+
+##### *Prototype*
+
+~~~
+_::forge(classname)
+~~~
 
 <p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#uncategorized">Uncategorized</a></p>
 
@@ -1123,7 +1269,7 @@ _::without(array,values)
 
 _**Alias**_: unique
 
-_**Description**_: Produces a duplicate-free version of the array, using === to test object equality. If you know in advance that the array is sorted, passing true for isSorted will run a much faster algorithm. If you want to compute unique items based on a transformation, pass an iterator function.
+_**Description**_: Produces a duplicate-free version of the array, using === to test object equality. If you know in advance that the array is sorted, passing true for isSorted will run a much faster algorithm. If you want to compute unique items based on a transformation, pass an iterator function. WARNING: this function's cyclomatic complexity is (at least) quadratic ! using it with large arrays (> 1000 items) can be very slow and memory consuming.
 
 ##### *Parameters*
 
@@ -1305,6 +1451,7 @@ _::range(start,stop,step)
 * [wrap](#wrap)
 * [compose](#compose)
 * [after](#after)
+* [before](#before)
 * [once](#once)
 * [partial](#partial)
 * [bind](#bind)
@@ -1362,6 +1509,24 @@ _**Description**_: Creates a version of the function that will only be run after
 
 ~~~
 _::after(count,function)
+~~~
+
+<p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#function-uh-ahem-functions">Function (uh, ahem) Functions</a></p>
+
+### before
+-----
+
+_**Description**_: Creates a version of the function that can be called no more than count times. The result of the last function call is memoized and returned when count has been reached.
+
+##### *Parameters*
+
++ *count*: int, the number of times the $function shall be executed
++ *function*: callable, the function
+
+##### *Prototype*
+
+~~~
+_::before(count,function)
 ~~~
 
 <p align="right"><a href="#table-of-contents">Table of contents</a> &#187; <a href="#function-uh-ahem-functions">Function (uh, ahem) Functions</a></p>

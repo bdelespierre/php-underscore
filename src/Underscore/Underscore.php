@@ -3,8 +3,8 @@
 namespace Underscore;
 
 /**
- * Underscore.php 0.0.1
- * https: *github.com/bdelespierre/underscore.php
+ * Underscore.php
+ * https://github.com/bdelespierre/underscore.php
  * (c) 2013-2014 Benjamin Delespierre
  * Underscore may be freely distributed under the LGPL license.
  */
@@ -16,9 +16,9 @@ class Underscore
      */
 
     /**
-     * Loop breaker (escape character)
+     * Loop breaker
      */
-    const BREAKER = "\x1b";
+    const BREAKER = "\0\0";
 
     /**
      * Iterates over a list of elements, yielding each in turn to an iterator function. The iterator is bound to
@@ -960,6 +960,9 @@ class Underscore
      * the array is sorted, passing true for isSorted will run a much faster algorithm. If you want to compute unique
      * items based on a transformation, pass an iterator function.
      *
+     * WARNING: this function's cyclomatic complexity is (at least) quadratic ! using it with large arrays
+     * (> 1000 items) can be very slow and memory consuming.
+     *
      * @category Array Functions
      *
      * @param traversable $array the list of items
@@ -974,14 +977,26 @@ class Underscore
         if (empty($array))
             return [];
 
-        $initial = $iterator ? static::map($array, $iterator, $context) : $array;
-        $result = [];
-        $seen = [];
+        // run a much faster algorithm if a transformation is not needed
+        if (is_array($array) && !$iterator)
+            return array_values(array_unique($array));
 
-        static::each($initial, function ($value, $index) use (& $array, $isSorted, & $result, & $seen) {
-            if ($isSorted ? (!$index || static::last($seen) !== $value) : !in_array($value, $seen, true)) {
-                $seen[] = $value;
-                $result[] = static::get($array, $index);
+        $initial = $iterator ? static::map($array, $iterator, $context) : $array;
+        $result  = [];
+
+        static::each($initial, function ($value, $index) use (& $array, $isSorted, & $result) {
+            static $seen = [];
+
+            if ($isSorted) {
+                if ($seen[0] !== $value) {
+                    $result[] = static::get($array, $index);
+                    $seen[0]  = $value;
+                }
+            } else {
+                if (!in_array($value, $seen, true)) {
+                    $result[] = static::get($array, $index);
+                    $seen[] = $value;
+                }
             }
         });
 
@@ -1261,6 +1276,20 @@ class Underscore
     }
 
     /**
+     * Returns a new negated version of the predicate function.
+     *
+     * @param  callable $function the function
+     *
+     * @return closure
+     */
+    public static function negate(callable $function)
+    {
+        return function () use ($function) {
+            return !call_user_func_array($function, func_get_args());
+        };
+    }
+
+    /**
      * Returns the composition of a list of functions, where each function consumes the return value of the function
      * that follows. In math terms, composing the functions f(), g(), and h() produces f(g(h())).
      *
@@ -1299,7 +1328,28 @@ class Underscore
         return function () use (& $count, $function) {
             if (--$count > 0)
                 return;
-            return $function();
+            return call_user_func_array($function, func_get_args());
+        };
+    }
+
+    /**
+     * Creates a version of the function that can be called no more than count times. The result of the last function
+     * call is memoized and returned when count has been reached.
+     *
+     * @category Function (uh, ahem) Functions
+     *
+     * @param  int $count the number of times the $function shall be executed
+     * @param  callable $function the function
+     *
+     * @return closure
+     */
+    public static function before($count, callable $function)
+    {
+        return function () use (& $count, $function) {
+            static $memo;
+            if (--$count > 0)
+                $memo = call_user_func_array($function, func_get_args());
+            return $memo;
         };
     }
 
@@ -1316,13 +1366,7 @@ class Underscore
      */
     public static function once(callable $function)
     {
-        return function () use ($function) {
-            static $result, $called = false;
-            if ($called)
-                return $result;
-            $called = true;
-            return $result = $function();
-        };
+        return static::before(2, $function);
     }
 
     /**
@@ -1802,6 +1846,48 @@ class Underscore
     }
 
     /**
+     * Returns a function that will itself return the key property of any passed-in object.
+     *
+     * @param string,int $key the key or offset to get
+     *
+     * @return closure
+     */
+    public static function property($key)
+    {
+        return function($object) use ($key) {
+            return static::get($object, $key);
+        };
+    }
+
+    /**
+     * Returns a predicate function that will tell you if a passed in object contains all of the key/value properties
+     * present in properties.
+     *
+     * @param traversable $properties the properties used by predicate
+     *
+     * @return closure
+     */
+    public static function matches($properties)
+    {
+        $length = static::size($properties);
+
+        return function($object) use ($properties, $length) {
+            if ($object === null)
+                return !$length;
+
+            $result = true;
+            static::each($properties, function($value, $key) use ($object, & $result) {
+                if (static::get($object, $key) != $value) {
+                    $result = false;
+                    return static::BREAKER;
+                }
+            });
+
+            return $result;
+        };
+    }
+
+    /**
      * Get the object's key value. If such keys doesn't exists, the default value is returned. If object is neither
      * Array nor an Object, the object itself is returned.
      *
@@ -2269,6 +2355,31 @@ class Underscore
     }
 
     /**
+     * Creates a function that returns the same value that is used as the argument of _::constant.
+     *
+     * @param mixed $value the value
+     *
+     * @return mixed
+     */
+    public static function constant($value)
+    {
+        return function() use ($value) {
+            return $value;
+        };
+    }
+
+    /**
+     * Returns undefined irrespective of the arguments passed to it. Useful as the default for optional callback
+     * arguments.
+     *
+     * @return void
+     */
+    public static function noop()
+    {
+        return;
+    }
+
+    /**
      * Invokes the given iterator function n times. Each invocation of iterator is called with an index argument.
      * Produces an array of the returned values.
      *
@@ -2412,6 +2523,38 @@ class Underscore
     }
 
     /**
+     * The equivalent of the finally keywork (available since PHP 5.5).
+     *
+     * @param  callable $function a function
+     * @param  callable $finally  another function that will *always* be executed after $function
+     * @param  [type]   $context  [description]
+     * @return [type]             [description]
+     */
+    public static function lastly(callable $function, callable $finally, $context = null)
+    {
+        static::_associate($function, $context);
+        static::_associate($finally, $context);
+
+        try { $result = $function(); } catch (\Exception $exception) { /* noop */ }
+        $finally();
+
+        if (isset($exception))
+            throw $exception;
+
+        return $result;
+    }
+
+    /**
+     * Returns an integer timestamp for the current time.
+     *
+     * @return int
+     */
+    public static function now()
+    {
+        return time();
+    }
+
+    /**
      * By default, Underscore uses ERB-style template delimiters, change the following template settings to
      * use alternative delimiters.
      */
@@ -2505,6 +2648,61 @@ class Underscore
     public static function chain($object)
     {
         return new Bridge($object, new static);
+    }
+
+    /**
+     * Class Forgery
+     * -------------
+     */
+
+    /**
+     * @see Underscore::forge
+     */
+    public static function strategy($classname)
+    {
+        return static::forge($classname);
+    }
+
+    /**
+     * Create new mixins on runtime. The implementation is based on Bob Weinand's idea of Scala traits implementation
+     * in PHP (see it here https://gist.github.com/bwoebi/7319798). This method decomposes the $classname to create
+     * a new class, using '\with' as a separator for traits.
+     *
+     * @param string $classname the class to forge
+     *
+     * @throws RuntimeException if class or traits are not availabled
+     *
+     * @return boolean
+     */
+    public static function forge($classname)
+    {
+        if (class_exists($classname))
+            return true;
+
+        if (strpos($classname, '\\with') === false)
+            return false;
+
+        list($namespace, $class) = str_split($classname, strrpos($classname, '\\'));
+        $class = substr($class, 1);
+
+        $traits = explode('\\with', $classname);
+        $base = '\\' . trim(array_shift($traits), '\\');
+
+        if (!class_exists($base, true))
+            throw new \RuntimeException("class $base does not exists");
+
+        if (empty($traits))
+            return false;
+
+        $use = '';
+        foreach($traits as $trait) {
+            if (!trait_exists($trait, true))
+                throw new \RuntimeException("trait $trait does not exists");
+            $use .= "use $trait; ";
+        }
+
+        // eval is now officially your friend!
+        return @eval("namespace $namespace { class $class extends $base { $use } }") !== false;
     }
 
     /**

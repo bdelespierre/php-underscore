@@ -3,7 +3,7 @@
 namespace Underscore;
 
 /**
- * Underscore.php 0.0.1
+ * Underscore.php
  * https: *github.com/bdelespierre/underscore.php
  * (c) 2013-2014 Benjamin Delespierre
  * Underscore may be freely distributed under the LGPL license.
