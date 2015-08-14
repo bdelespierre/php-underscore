@@ -1545,7 +1545,6 @@ class Underscore
 
     /**
      * Call (execute) the given function, optionnaly bound to $context, with the given arguments and return its result.
-     * The arguments are passed _BEFORE_ the context: `_::call($fn, $arg1, $arg2, $arg3, $context);`
      *
      * @since 0.2.0
      * @category Function (uh, ahem) Functions
@@ -1558,7 +1557,8 @@ class Underscore
      */
     public static function call(callable $function, $context = null)
     {
-        return static::apply($function, array_slice(func_get_args(), 1, -1), $context);
+
+        return static::apply($function, $context, array_slice(func_get_args(), 2));
     }
 
     /**
@@ -1574,7 +1574,7 @@ class Underscore
      *
      * @return mixed
      */
-    public static function apply(callable $function, $arguments, $context = null)
+    public static function apply(callable $function, $context = null, $arguments = [])
     {
         static::associate($function, $context);
         return call_user_func_array($function, static::values($arguments));
