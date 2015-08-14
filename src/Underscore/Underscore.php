@@ -10,15 +10,13 @@ namespace Underscore;
  */
 class Underscore
 {
+    const BREAKER = "\0\0"; // loop breaker
+    const VERSION = "0.2.0";
+
     /**
      * Collection Functions
      * --------------------
      */
-
-    /**
-     * Loop breaker
-     */
-    const BREAKER = "\0\0";
 
     /**
      * Iterates over a list of elements, yielding each in turn to an iterator function. The iterator is bound to
@@ -1278,6 +1276,9 @@ class Underscore
     /**
      * Returns a new negated version of the predicate function.
      *
+     * @since 0.2.0
+     * @category Function (uh, ahem) Functions
+     *
      * @param  callable $function the function
      *
      * @return closure
@@ -1336,6 +1337,7 @@ class Underscore
      * Creates a version of the function that can be called no more than count times. The result of the last function
      * call is memoized and returned when count has been reached.
      *
+     * @since 0.2.0
      * @category Function (uh, ahem) Functions
      *
      * @param  int $count the number of times the $function shall be executed
@@ -1539,6 +1541,43 @@ class Underscore
                 $function();
             }
         };
+    }
+
+    /**
+     * Call (execute) the given function, optionnaly bound to $context, with the given arguments and return its result.
+     * The arguments are passed _BEFORE_ the context: `_::call($fn, $arg1, $arg2, $arg3, $context);`
+     *
+     * @since 0.2.0
+     * @category Function (uh, ahem) Functions
+     *
+     * @param callable $function the function
+     * @param mixed $arg... optional, multiple, the function arguments
+     * @param object $context the function's context
+     *
+     * @return mixed
+     */
+    public static function call(callable $function, $context = null)
+    {
+        return static::apply($function, array_slice(func_get_args(), 1, -1), $context);
+    }
+
+    /**
+     * Call (execute) the given function, optionnaly bound to $context, with the given argument list and return its
+     * result.
+     *
+     * @since 0.2.0
+     * @category Function (uh, ahem) Functions
+     *
+     * @param callable $function the function
+     * @param list $arguments the arguments
+     * @param object $context the function's context
+     *
+     * @return mixed
+     */
+    public static function apply(callable $function, $arguments, $context = null)
+    {
+        static::associate($function, $context);
+        return call_user_func_array($function, static::values($arguments));
     }
 
     /**
@@ -1848,6 +1887,9 @@ class Underscore
     /**
      * Returns a function that will itself return the key property of any passed-in object.
      *
+     * @since 0.2.0
+     * @category Object Functions
+     *
      * @param string,int $key the key or offset to get
      *
      * @return closure
@@ -1862,6 +1904,9 @@ class Underscore
     /**
      * Returns a predicate function that will tell you if a passed in object contains all of the key/value properties
      * present in properties.
+     *
+     * @since 0.2.0
+     * @category Object Functions
      *
      * @param traversable $properties the properties used by predicate
      *
@@ -2357,6 +2402,9 @@ class Underscore
     /**
      * Creates a function that returns the same value that is used as the argument of _::constant.
      *
+     * @since 0.2.0
+     * @category Utility Functions
+     *
      * @param mixed $value the value
      *
      * @return mixed
@@ -2371,6 +2419,9 @@ class Underscore
     /**
      * Returns undefined irrespective of the arguments passed to it. Useful as the default for optional callback
      * arguments.
+     *
+     * @since 0.2.0
+     * @category Utility Functions
      *
      * @return void
      */
@@ -2525,10 +2576,14 @@ class Underscore
     /**
      * The equivalent of the finally keywork (available since PHP 5.5).
      *
-     * @param  callable $function a function
-     * @param  callable $finally  another function that will *always* be executed after $function
-     * @param  [type]   $context  [description]
-     * @return [type]             [description]
+     * @since 0.2.0
+     * @category Utility Functions
+     *
+     * @param callable $function a function
+     * @param callable $finally  another function that will *always* be executed after $function
+     * @param object $context the functions context
+     *
+     * @return mixed
      */
     public static function lastly(callable $function, callable $finally, $context = null)
     {
@@ -2667,6 +2722,9 @@ class Underscore
      * Create new mixins on runtime. The implementation is based on Bob Weinand's idea of Scala traits implementation
      * in PHP (see it here https://gist.github.com/bwoebi/7319798). This method decomposes the $classname to create
      * a new class, using '\with' as a separator for traits.
+     *
+     * @since 0.2.0
+     * @category Class Forgery
      *
      * @param string $classname the class to forge
      *
