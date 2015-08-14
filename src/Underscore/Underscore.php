@@ -3,22 +3,20 @@
 namespace Underscore;
 
 /**
- * Underscore.php 0.0.1
- * https: *github.com/bdelespierre/underscore.php
+ * Underscore.php
+ * https://github.com/bdelespierre/underscore.php
  * (c) 2013-2014 Benjamin Delespierre
  * Underscore may be freely distributed under the LGPL license.
  */
 class Underscore
 {
+    const BREAKER = "\0\0"; // loop breaker
+    const VERSION = "0.2.0";
+
     /**
      * Collection Functions
      * --------------------
      */
-
-    /**
-     * Loop breaker (escape character)
-     */
-    const BREAKER = "\x1b";
 
     /**
      * Iterates over a list of elements, yielding each in turn to an iterator function. The iterator is bound to
@@ -40,7 +38,7 @@ class Underscore
         if ($list === null)
             return null;
 
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         if (!static::isTraversable($list))
             throw new \InvalidArgumentException("cannot iterate over " . static::typeOf($list));
@@ -79,7 +77,7 @@ class Underscore
         if ($list === null)
             return $list;
 
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         if (!static::isTraversable($list))
             throw new \InvalidArgumentException("canot iterate over " . static::typeOf($list));
@@ -117,7 +115,7 @@ class Underscore
      */
     public static function map($list, callable $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $result = [];
         static::each($list, function ($item, $index, $list) use ($iterator, & $result) {
@@ -160,7 +158,7 @@ class Underscore
      */
     public static function reduce($list, callable $iterator, $memo, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         static::each($list, function ($item, $index, $list) use ($iterator, & $memo) {
             $memo = $iterator($memo, $item, $index, $list);
@@ -217,7 +215,7 @@ class Underscore
      */
     public static function find($list, callable $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $result = null;
         static::each($list, function ($item) use ($iterator, & $result) {
@@ -255,7 +253,7 @@ class Underscore
         if (empty($list))
             return [];
 
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         !$iterator && $iterator = function ($item) {
             return (boolean)$item;
@@ -283,7 +281,7 @@ class Underscore
      */
     public static function where($list, $properties)
     {
-        return static::filter($list, static::_getListfilter($properties));
+        return static::filter($list, static::getListfilter($properties));
     }
 
     /**
@@ -298,7 +296,7 @@ class Underscore
      */
     public static function findWhere($list, $properties)
     {
-        return static::find($list, static::_getListFilter($properties));
+        return static::find($list, static::getListFilter($properties));
     }
 
     /**
@@ -314,7 +312,7 @@ class Underscore
      */
     public static function reject($list, callable $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $result = [];
         static::each($list, function ($item, $index) use ($iterator, & $result) {
@@ -347,7 +345,7 @@ class Underscore
      */
     public static function every($list, callable $iterator = null, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         !$iterator && $iterator = function ($item) {
             return static::identity($item);
@@ -386,7 +384,7 @@ class Underscore
      */
     public static function some($list, callable $iterator = null, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         !$iterator && $iterator = function ($item) {
             return static::identity($item);
@@ -495,7 +493,7 @@ class Underscore
      */
     public static function max($list, callable $iterator = null, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         !$iterator && $iterator = function ($item) {
             return static::identity($item);
@@ -526,7 +524,7 @@ class Underscore
      */
     public static function min($list, callable $iterator = null, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         !$iterator && $iterator = function ($item) {
             return static::identity($item);
@@ -557,7 +555,7 @@ class Underscore
      */
     public static function sortBy($list, callable $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $result = static::map($list, function ($value) use ($iterator) {
             return ['value' => $value, 'criteria' => $iterator($value)];
@@ -585,7 +583,7 @@ class Underscore
      */
     public static function indexBy($list, $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $result = [];
         static::each($list, function ($item) use ($iterator, & $result) {
@@ -611,7 +609,7 @@ class Underscore
      */
     public static function groupBy($list, $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $result = [];
         static::each($list, function ($item) use ($iterator, & $result) {
@@ -744,7 +742,7 @@ class Underscore
      */
     public static function partition($list, callable $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $pass = []; $fail = [];
         static::each($list, function($item) use (& $pass, & $fail, $iterator) {
@@ -960,6 +958,9 @@ class Underscore
      * the array is sorted, passing true for isSorted will run a much faster algorithm. If you want to compute unique
      * items based on a transformation, pass an iterator function.
      *
+     * WARNING: this function's cyclomatic complexity is (at least) quadratic ! using it with large arrays
+     * (> 1000 items) can be very slow and memory consuming.
+     *
      * @category Array Functions
      *
      * @param traversable $array the list of items
@@ -974,14 +975,26 @@ class Underscore
         if (empty($array))
             return [];
 
-        $initial = $iterator ? static::map($array, $iterator, $context) : $array;
-        $result = [];
-        $seen = [];
+        // run a much faster algorithm if a transformation is not needed
+        if (is_array($array) && !$iterator)
+            return array_values(array_unique($array));
 
-        static::each($initial, function ($value, $index) use (& $array, $isSorted, & $result, & $seen) {
-            if ($isSorted ? (!$index || static::last($seen) !== $value) : !in_array($value, $seen, true)) {
-                $seen[] = $value;
-                $result[] = static::get($array, $index);
+        $initial = $iterator ? static::map($array, $iterator, $context) : $array;
+        $result  = [];
+
+        static::each($initial, function ($value, $index) use (& $array, $isSorted, & $result) {
+            static $seen = [];
+
+            if ($isSorted) {
+                if ($seen[0] !== $value) {
+                    $result[] = static::get($array, $index);
+                    $seen[0]  = $value;
+                }
+            } else {
+                if (!in_array($value, $seen, true)) {
+                    $result[] = static::get($array, $index);
+                    $seen[] = $value;
+                }
             }
         });
 
@@ -1191,14 +1204,14 @@ class Underscore
      */
     public static function sortedIndex($array, $value, $iterator = null, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         if (!is_array($array) && !$array instanceof \ArrayAccess)
             $array = static::toArray($array);
 
         $iterator = $iterator === null
             ? function ($item) { return static::identity($item); }
-            : static::_getLookupIterator($iterator);
+            : static::getLookupIterator($iterator);
 
         $value = $iterator($value);
         $low   = 0;
@@ -1261,6 +1274,23 @@ class Underscore
     }
 
     /**
+     * Returns a new negated version of the predicate function.
+     *
+     * @since 0.2.0
+     * @category Function (uh, ahem) Functions
+     *
+     * @param  callable $function the function
+     *
+     * @return closure
+     */
+    public static function negate(callable $function)
+    {
+        return function () use ($function) {
+            return !call_user_func_array($function, func_get_args());
+        };
+    }
+
+    /**
      * Returns the composition of a list of functions, where each function consumes the return value of the function
      * that follows. In math terms, composing the functions f(), g(), and h() produces f(g(h())).
      *
@@ -1299,7 +1329,29 @@ class Underscore
         return function () use (& $count, $function) {
             if (--$count > 0)
                 return;
-            return $function();
+            return call_user_func_array($function, func_get_args());
+        };
+    }
+
+    /**
+     * Creates a version of the function that can be called no more than count times. The result of the last function
+     * call is memoized and returned when count has been reached.
+     *
+     * @since 0.2.0
+     * @category Function (uh, ahem) Functions
+     *
+     * @param  int $count the number of times the $function shall be executed
+     * @param  callable $function the function
+     *
+     * @return closure
+     */
+    public static function before($count, callable $function)
+    {
+        return function () use (& $count, $function) {
+            static $memo;
+            if (--$count > 0)
+                $memo = call_user_func_array($function, func_get_args());
+            return $memo;
         };
     }
 
@@ -1316,13 +1368,7 @@ class Underscore
      */
     public static function once(callable $function)
     {
-        return function () use ($function) {
-            static $result, $called = false;
-            if ($called)
-                return $result;
-            $called = true;
-            return $result = $function();
-        };
+        return static::before(2, $function);
     }
 
     /**
@@ -1498,6 +1544,43 @@ class Underscore
     }
 
     /**
+     * Call (execute) the given function, optionnaly bound to $context, with the given arguments and return its result.
+     *
+     * @since 0.2.0
+     * @category Function (uh, ahem) Functions
+     *
+     * @param callable $function the function
+     * @param mixed $arg... optional, multiple, the function arguments
+     * @param object $context the function's context
+     *
+     * @return mixed
+     */
+    public static function call(callable $function, $context = null)
+    {
+
+        return static::apply($function, $context, array_slice(func_get_args(), 2));
+    }
+
+    /**
+     * Call (execute) the given function, optionnaly bound to $context, with the given argument list and return its
+     * result.
+     *
+     * @since 0.2.0
+     * @category Function (uh, ahem) Functions
+     *
+     * @param callable $function the function
+     * @param list $arguments the arguments
+     * @param object $context the function's context
+     *
+     * @return mixed
+     */
+    public static function apply(callable $function, $context = null, $arguments = [])
+    {
+        static::associate($function, $context);
+        return call_user_func_array($function, static::values($arguments));
+    }
+
+    /**
      * Object Functions
      * ----------------
      */
@@ -1635,7 +1718,7 @@ class Underscore
 
         static::each($sources, function ($source) use (& $destination) {
             static::each($source, function ($value, $name) use (& $destination) {
-                static::_set($destination, $name, $value);
+                static::set($destination, $name, $value);
             });
         });
 
@@ -1665,7 +1748,7 @@ class Underscore
 
         static::each($keys, function ($key) use ($object, & $result) {
             if (static::has($object, $key))
-                static::_set($result, $key, static::get($object, $key));
+                static::set($result, $key, static::get($object, $key));
         });
 
         return $result;
@@ -1694,7 +1777,7 @@ class Underscore
         $keys = array_flip(static::toArray($keys));
         static::each($object, function ($value, $name) use ($keys, & $result) {
             if (!isset($keys[$name]))
-                static::_set($result, $name, $value);
+                static::set($result, $name, $value);
         });
 
         return $result;
@@ -1733,7 +1816,7 @@ class Underscore
 
             static::each($default, function ($item, $index) use (& $result) {
                 if (!static::has($result, $index))
-                    static::_set($result, $index, $item);
+                    static::set($result, $index, $item);
             });
         });
 
@@ -1799,6 +1882,54 @@ class Underscore
         return (static::isArray($object, true) && array_key_exists((string)$key, $object))
             || (static::isArray($object) && isset($object[$key]))
             || (static::isObject($object) && property_exists($object, $key));
+    }
+
+    /**
+     * Returns a function that will itself return the key property of any passed-in object.
+     *
+     * @since 0.2.0
+     * @category Object Functions
+     *
+     * @param string,int $key the key or offset to get
+     *
+     * @return closure
+     */
+    public static function property($key)
+    {
+        return function($object) use ($key) {
+            return static::get($object, $key);
+        };
+    }
+
+    /**
+     * Returns a predicate function that will tell you if a passed in object contains all of the key/value properties
+     * present in properties.
+     *
+     * @since 0.2.0
+     * @category Object Functions
+     *
+     * @param traversable $properties the properties used by predicate
+     *
+     * @return closure
+     */
+    public static function matches($properties)
+    {
+        $length = static::size($properties);
+
+        return function($object) use ($properties, $length) {
+            if ($object === null)
+                return !$length;
+
+            $result = true;
+            static::each($properties, function($value, $key) use ($object, & $result) {
+                if (static::get($object, $key) != $value) {
+                    $result = false;
+                    return static::BREAKER;
+                }
+            });
+
+            return $result;
+        };
     }
 
     /**
@@ -1887,7 +2018,7 @@ class Underscore
      */
     public static function isEqual($object, $other)
     {
-        return static::_equal($object, $other, [], []);
+        return static::equal($object, $other, [], []);
     }
 
     /**
@@ -2269,6 +2400,37 @@ class Underscore
     }
 
     /**
+     * Creates a function that returns the same value that is used as the argument of _::constant.
+     *
+     * @since 0.2.0
+     * @category Utility Functions
+     *
+     * @param mixed $value the value
+     *
+     * @return mixed
+     */
+    public static function constant($value)
+    {
+        return function() use ($value) {
+            return $value;
+        };
+    }
+
+    /**
+     * Returns undefined irrespective of the arguments passed to it. Useful as the default for optional callback
+     * arguments.
+     *
+     * @since 0.2.0
+     * @category Utility Functions
+     *
+     * @return void
+     */
+    public static function noop()
+    {
+        return;
+    }
+
+    /**
      * Invokes the given iterator function n times. Each invocation of iterator is called with an index argument.
      * Produces an array of the returned values.
      *
@@ -2282,7 +2444,7 @@ class Underscore
      */
     public static function times($n, callable $iterator, $context = null)
     {
-        static::_associate($iterator, $context);
+        static::associate($iterator, $context);
 
         $n = max(0, $n);
         $accum = [];
@@ -2404,11 +2566,47 @@ class Underscore
         $value = static::get($object, $property);
 
         if (static::isFunction($value)) {
-            static::_associate($value, $object);
+            static::associate($value, $object);
             return $value();
         }
 
         return $value;
+    }
+
+    /**
+     * The equivalent of the finally keywork (available since PHP 5.5).
+     *
+     * @since 0.2.0
+     * @category Utility Functions
+     *
+     * @param callable $function a function
+     * @param callable $finally  another function that will *always* be executed after $function
+     * @param object $context the functions context
+     *
+     * @return mixed
+     */
+    public static function lastly(callable $function, callable $finally, $context = null)
+    {
+        static::associate($function, $context);
+        static::associate($finally, $context);
+
+        try { $result = $function(); } catch (\Exception $exception) { /* noop */ }
+        $finally();
+
+        if (isset($exception))
+            throw $exception;
+
+        return $result;
+    }
+
+    /**
+     * Returns an integer timestamp for the current time.
+     *
+     * @return int
+     */
+    public static function now()
+    {
+        return time();
     }
 
     /**
@@ -2508,6 +2706,64 @@ class Underscore
     }
 
     /**
+     * Class Forgery
+     * -------------
+     */
+
+    /**
+     * @see Underscore::forge
+     */
+    public static function strategy($classname)
+    {
+        return static::forge($classname);
+    }
+
+    /**
+     * Create new mixins on runtime. The implementation is based on Bob Weinand's idea of Scala traits implementation
+     * in PHP (see it here https://gist.github.com/bwoebi/7319798). This method decomposes the $classname to create
+     * a new class, using '\with' as a separator for traits.
+     *
+     * @since 0.2.0
+     * @category Class Forgery
+     *
+     * @param string $classname the class to forge
+     *
+     * @throws RuntimeException if class or traits are not availabled
+     *
+     * @return boolean
+     */
+    public static function forge($classname)
+    {
+        if (class_exists($classname))
+            return true;
+
+        if (strpos($classname, '\\with') === false)
+            return false;
+
+        list($namespace, $class) = str_split($classname, strrpos($classname, '\\'));
+        $class = substr($class, 1);
+
+        $traits = explode('\\with', $classname);
+        $base = '\\' . trim(array_shift($traits), '\\');
+
+        if (!class_exists($base, true))
+            throw new \RuntimeException("class $base does not exists");
+
+        if (empty($traits))
+            return false;
+
+        $use = '';
+        foreach($traits as $trait) {
+            if (!trait_exists($trait, true))
+                throw new \RuntimeException("trait $trait does not exists");
+            $use .= "use $trait; ";
+        }
+
+        // eval is now officially your friend!
+        return @eval("namespace $namespace { class $class extends $base { $use } }") !== false;
+    }
+
+    /**
      * Internal Functions
      * ------------------
      */
@@ -2560,7 +2816,7 @@ class Underscore
      *
      * @return void
      */
-    protected static function _associate(& $function, $context)
+    protected static function associate(& $function, $context)
     {
         if ($context && $function instanceof \Closure)
             if (!$function = $function->bindTo($context))
@@ -2576,7 +2832,7 @@ class Underscore
      *
      * @return closure
      */
-    protected static function _getListfilter($properties)
+    protected static function getListfilter($properties)
     {
         return function ($item) use ($properties) {
             foreach ($properties as $property => $value)
@@ -2595,34 +2851,11 @@ class Underscore
      *
      * @return mixed,closure
      */
-    protected static function _getLookupIterator($value)
+    protected static function getLookupIterator($value)
     {
         return is_callable($value) ? $value : function ($object) use ($value) {
             return static::get($object, $value);
         };
-    }
-
-    /**
-     * Sets the given structure's property identified by its name. Gives priority to array's getters ([] priorityze
-     * on ->).
-     *
-     * @category Internal Functions
-     *
-     * @param mixed $structure reference, the structure
-     * @param string $name the key
-     * @param string $value the value
-     *
-     * @return void
-     */
-    protected static function _set(& $structure, $name, $value)
-    {
-        if (is_array($structure) || $structure instanceof \ArrayAccess)
-            $structure[$name] = $value;
-
-        if (is_object($structure))
-            $structure->$name = $value;
-
-        return $structure;
     }
 
     /**
@@ -2637,7 +2870,7 @@ class Underscore
      *
      * @return bool
      */
-    protected static function _equal($a, $b, $aStack, $bStack)
+    protected static function equal($a, $b, $aStack, $bStack)
     {
         // Unwrap any wrapped object.
         $a instanceof self && $a = $a->_wrapped;
@@ -2673,7 +2906,7 @@ class Underscore
             static::each($a, function ($item, $key) use (& $a, & $b, & $aStack, & $bStack, & $size, & $result) {
                 $size++;
 
-                $result = static::has($b, $key) && static::_equal(
+                $result = static::has($b, $key) && static::equal(
                     static::get($a, $key),
                     static::get($b, $key),
                     $aStack,

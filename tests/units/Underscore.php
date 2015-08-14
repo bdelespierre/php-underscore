@@ -8,6 +8,7 @@ require_once __DIR__ . '/../../tests/mocks/Doer.php';
 require_once __DIR__ . '/../../tests/mocks/ClosureClass.php';
 require_once __DIR__ . '/../../tests/mocks/SomeClass.php';
 require_once __DIR__ . '/../../tests/mocks/MagicMethods.php';
+require_once __DIR__ . '/../../tests/mocks/Traits.php';
 
 class_exists('\SplType', false) ||
 require_once __DIR__ . '/../../tests/mocks/SplType.php';
@@ -18,7 +19,6 @@ use \Underscore\Underscore as _;
 /**
  * NOTE: for integrity's sake, please keep the test methods in the same order as Underscore class methods.
  */
-
 class Underscore extends atoum
 {
 	/**
@@ -936,9 +936,9 @@ class Underscore extends atoum
 	}
 
 	/**
-     * Array Functions
-     * ---------------
-     */
+	 * Array Functions
+	 * ---------------
+	 */
 
 	/**
 	 * @dataProvider peopleDataProvider
@@ -1463,9 +1463,9 @@ class Underscore extends atoum
 	}
 
 	/**
-     * Function (uh, ahem) Functions
-     * -----------------------------
-     */
+	 * Function (uh, ahem) Functions
+	 * -----------------------------
+	 */
 
 	/**
 	 * @tags functions
@@ -1513,6 +1513,24 @@ class Underscore extends atoum
 
 		$this
 			->boolean($wrapper())
+			->isTrue();
+	}
+
+	/**
+	 * @tags functions
+	 */
+	public function testNegate()
+	{
+		$fn = _::negate(function() { return true; });
+
+		$this
+			->boolean($fn())
+			->isFalse();
+
+		$fn = _::negate($fn);
+
+		$this
+			->boolean($fn())
 			->isTrue();
 	}
 
@@ -1585,6 +1603,27 @@ class Underscore extends atoum
 		$this
 			->boolean($called)
 			->isTrue();
+	}
+
+	/**
+	 * @tags functions
+	 */
+	public function testBefore()
+	{
+		$fn = _::before(4, function() { static $count = 0; return ++$count; });
+
+		$this
+			->integer($fn())
+			->isEqualTo(1);
+
+		$this
+			->integer($fn())
+			->isEqualTo(2);
+
+		for ($i=0; $i<3; $i++)
+			$this
+				->integer($fn())
+				->isEqualTo(3);
 	}
 
 	/**
@@ -1783,9 +1822,39 @@ class Underscore extends atoum
 	}
 
 	/**
-     * Object Functions
-     * ----------------
-     */
+	 * @tags functions
+	 */
+	public function testCall()
+	{
+		$object = (object)['a' => 1];
+		$fn = function($b, $c) {
+			return $this->a + $b + $c;
+		};
+
+		$this
+			->integer(_::call($fn, $object, 2, 3))
+			->isEqualTo(6);
+	}
+
+	/**
+	 * @tags functions
+	 */
+	public function testApply()
+	{
+		$object = (object)['a' => 1];
+		$fn = function($b, $c) {
+			return $this->a + $b + $c;
+		};
+
+		$this
+			->integer(_::apply($fn, $object, [2, 3]))
+			->isEqualTo(6);
+	}
+
+	/**
+	 * Object Functions
+	 * ----------------
+	 */
 
 	/**
 	 * @tags objects
@@ -2076,6 +2145,49 @@ class Underscore extends atoum
 		$this
 			->boolean(_::has(false, false))
 			->isFalse();
+	}
+
+	/**
+	 * @tags objects
+	 */
+	public function testProperty()
+	{
+		$fn = _::property('prop');
+
+		$this
+			->integer($fn(['prop' => 1]))
+			->isEqualTo(1);
+
+		$this
+			->integer($fn((object)['prop' => 2]))
+			->isEqualTo(2);
+
+		$this
+			->integer($fn(new \ArrayIterator(['prop' => 3])))
+			->isEqualTo(3);
+
+		$this
+			->variable($fn((object)[]))
+			->isNull();
+	}
+
+	public function testMatch()
+	{
+		$fn = _::matches(['valid' => 1, 'paid' => 0]);
+
+		$this
+			->typeTolerant(['valid' => 1, 'name' => 'foo', 'paid' => 0], null, function($in) use ($fn) {
+				$this
+					->boolean($fn($in))
+					->isTrue();
+			}, [0, -1]);
+
+		$this
+			->typeTolerant(['valid' => 0, 'name' => 'foo', 'paid' => 1], null, function($in) use ($fn) {
+				$this
+					->boolean($fn($in))
+					->isFalse();
+			}, [0, -1]);
 	}
 
 	/**
@@ -2744,6 +2856,28 @@ class Underscore extends atoum
 	/**
 	 * @tags utilities
 	 */
+	public function testConstant()
+	{
+		$fn = _::constant(1);
+
+		$this
+			->integer($fn())
+			->isEqualTo(1);
+	}
+
+	/**
+	 * @tags utilities
+	 */
+	public function testNoop()
+	{
+		$this
+			->variable(_::noop(1,2,3))
+			->isNull();
+	}
+
+	/**
+	 * @tags utilities
+	 */
 	public function testTimes()
 	{
 		$fn = function() { static $num = 0; return ++$num; };
@@ -2853,6 +2987,30 @@ class Underscore extends atoum
 	/**
 	 * @tags utilities
 	 */
+	public function testLastly()
+	{
+		try {
+			_::lastly(function() {
+				throw new \Exception("");
+			}, function() use (&$lastly) {
+				$lastly = true;
+			});
+		} catch (\Exception $e) {
+			$exception = true;
+		}
+
+		$this
+			->boolean($lastly)
+			->isTrue();
+
+		$this
+			->boolean($exception)
+			->isTrue();
+	}
+
+	/**
+	 * @tags utilities
+	 */
 	public function testTemplate()
 	{
 		// interpolate
@@ -2892,9 +3050,9 @@ class Underscore extends atoum
 	}
 
 	/**
-     * Chaining
-     * --------
-     */
+	 * Chaining
+	 * --------
+	 */
 
 	/**
 	 * @dataProvider peopleDataProvider
@@ -2917,6 +3075,34 @@ class Underscore extends atoum
 				'mfreeman'    => 'morgan freeman',
 				'jnicholson'  => 'jack nicholson',
 			]);
+	}
+
+	/**
+	 * Class Forgery
+	 * -------------
+	 */
+
+	/**
+	 * @tags forgery
+	 */
+	public function testForge()
+	{
+		_::forge('stdClass\with\Traits\A\with\Traits\B\with\Traits\C');
+
+		$this
+			->boolean(class_exists('stdClass\with\Traits\A\with\Traits\B\with\Traits\C', false))
+			->isTrue();
+
+		// it doesn't create intermediary classes
+		$this
+			->boolean(class_exists('stdClass\widh\tA', false))
+			->isFalse();
+
+		$object = new \stdClass\with\Traits\A\with\Traits\B\with\Traits\C;
+
+		$this
+			->integer($object->fnC())
+			->isEqualTo(3);
 	}
 
 	/**

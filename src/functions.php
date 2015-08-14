@@ -6,8 +6,8 @@
 // \____/_/ /_/\__,_/\___/_/  /____/\___/\____/_/   \___(_) .___/_/ /_/ .___/
 //                                                       /_/         /_/
 //
-// Build Version: f9b328b
-// Last Update:   Mon Jan 12 18:02:16 2015 +0100
+// Build Version: 0.2.0
+// Last Update:   Fri, 14 Aug 2015 15:42:35 +0200
 //
 
 require_once __DIR__ . '/Underscore/Underscore.php';
@@ -236,6 +236,11 @@ function _wrap($function, $wrapper)
 	return Underscore::wrap($function, $wrapper);
 }
 
+function _negate($function)
+{
+	return Underscore::negate($function);
+}
+
 function _compose($functions)
 {
 	return Underscore::compose($functions);
@@ -244,6 +249,11 @@ function _compose($functions)
 function _after($count, $function)
 {
 	return Underscore::after($count, $function);
+}
+
+function _before($count, $function)
+{
+	return Underscore::before($count, $function);
 }
 
 function _once($function)
@@ -279,6 +289,16 @@ function _memoize($function, $hashFunction=NULL, &$cache=NULL)
 function _throttle($function, $wait)
 {
 	return Underscore::throttle($function, $wait);
+}
+
+function _call($function, $context=NULL)
+{
+	return Underscore::call($function, $context);
+}
+
+function _apply($function, $context=NULL, $arguments=[])
+{
+	return Underscore::apply($function, $context, $arguments);
 }
 
 function _keys($object)
@@ -339,6 +359,16 @@ function _tap($object, $interceptor)
 function _has($object, $key)
 {
 	return Underscore::has($object, $key);
+}
+
+function _property($key)
+{
+	return Underscore::property($key);
+}
+
+function _matches($properties)
+{
+	return Underscore::matches($properties);
 }
 
 function _get($object, $key, $default=NULL)
@@ -456,6 +486,16 @@ function _identity($value)
 	return Underscore::identity($value);
 }
 
+function _constant($value)
+{
+	return Underscore::constant($value);
+}
+
+function _noop()
+{
+	return Underscore::noop();
+}
+
 function _times($n, $iterator, $context=NULL)
 {
 	return Underscore::times($n, $iterator, $context);
@@ -496,6 +536,16 @@ function _result($object, $property)
 	return Underscore::result($object, $property);
 }
 
+function _lastly($function, $finally, $context=NULL)
+{
+	return Underscore::lastly($function, $finally, $context);
+}
+
+function _now()
+{
+	return Underscore::now();
+}
+
 function _template($templateString, $data=[], $settings=[])
 {
 	return Underscore::template($templateString, $data, $settings);
@@ -504,5 +554,10 @@ function _template($templateString, $data=[], $settings=[])
 function _chain($object)
 {
 	return Underscore::chain($object);
+}
+
+function _forge($classname)
+{
+	return Underscore::forge($classname);
 }
 
