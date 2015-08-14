@@ -11,7 +11,9 @@ $template['functions']['main'] = <<< EOF
 //                                                       /_/         /_/
 //
 // Build Version: <%=\$build_version%>
+
 // Last Update:   <%=\$last_update%>
+
 //
 
 require_once __DIR__ . '/Underscore/Underscore.php';

@@ -6,8 +6,8 @@
 // \____/_/ /_/\__,_/\___/_/  /____/\___/\____/_/   \___(_) .___/_/ /_/ .___/
 //                                                       /_/         /_/
 //
-// Build Version: 9096f6a
-// Last Update:   Fri Aug 14 11:48:16 2015 +0200
+// Build Version: 0.2.0
+// Last Update:   Fri, 14 Aug 2015 15:42:35 +0200
 //
 
 require_once __DIR__ . '/Underscore/Underscore.php';
@@ -289,6 +289,16 @@ function _memoize($function, $hashFunction=NULL, &$cache=NULL)
 function _throttle($function, $wait)
 {
 	return Underscore::throttle($function, $wait);
+}
+
+function _call($function, $context=NULL)
+{
+	return Underscore::call($function, $context);
+}
+
+function _apply($function, $context=NULL, $arguments=[])
+{
+	return Underscore::apply($function, $context, $arguments);
 }
 
 function _keys($object)

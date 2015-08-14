@@ -29,8 +29,8 @@ function _makeFunctions()
 	foreach (_getMethods() as $function)
 		$content .= $funcTemplate(compact('function'));
 
-	$build_version = `git log --format="%h"  | head -n1` ?: 'custom';
-	$last_update   = `git log --format="%cd" | head -n1` ?: date('r');
+	$build_version = _::VERSION;
+	$last_update   = date('r');
 
 	return _::template($template['functions']['main'], compact('content', 'build_version', 'last_update'));
 }
