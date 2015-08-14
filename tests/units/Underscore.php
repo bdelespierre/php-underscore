@@ -19,7 +19,6 @@ use \Underscore\Underscore as _;
 /**
  * NOTE: for integrity's sake, please keep the test methods in the same order as Underscore class methods.
  */
-
 class Underscore extends atoum
 {
 	/**
@@ -1820,6 +1819,36 @@ class Underscore extends atoum
 			->integer($count)
 			->isGreaterThan(0)
 			->isLessThanOrEqualTo(10);
+	}
+
+	/**
+	 * @tags functions
+	 */
+	public function testCall()
+	{
+		$object = (object)['a' => 1];
+		$fn = function($b, $c) {
+			return $this->a + $b + $c;
+		};
+
+		$this
+			->integer(_::call($fn, $object, 2, 3))
+			->isEqualTo(6);
+	}
+
+	/**
+	 * @tags functions
+	 */
+	public function testApply()
+	{
+		$object = (object)['a' => 1];
+		$fn = function($b, $c) {
+			return $this->a + $b + $c;
+		};
+
+		$this
+			->integer(_::apply($fn, $object, [2, 3]))
+			->isEqualTo(6);
 	}
 
 	/**
