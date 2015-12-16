@@ -1044,7 +1044,7 @@ class Underscore
         $result = [];
         static::each($array, function($value, $index) use (& $result, $args, $argsLength) {
             if (static::contains($result, $value))
-                continue;
+                return;
 
             for ($i=1; $i<$argsLength; $i++)
                 if (!static::contains($args[$i], $value))
