@@ -2470,7 +2470,7 @@ class Underscore
         if ($max === null)
             list($min, $max) = [0, $min];
 
-        return rand($min, $max);
+        return mt_rand($min, $max);
     }
 
     /**
