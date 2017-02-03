@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Underscore\Underscore;
+
+$methods = Underscore::chain((new ReflectionClass(Underscore::class))->getMethods())
+    ->map(function ($method) {
+        if (!$method->isPublic() || strpos($method->name, '__') !== false) {
+            return Underscore::continue();
+        }
+
+        return (object)[
+            'name'     => strtolower(preg_replace('/(NaN|RegExp|[A-Z])/', '_$1', $method->name)),
+            'reflect'  => $method,
+        ];
+    })
+    ->indexBy('name')
+    ->value();
+
+echo "<?php\n"; ?>
+
+//    __  __          __                                            __
+//   / / / /___  ____/ /__  ___________________  ________    ____  / /_  ____
+//  / / / / __ \/ __  / _ \/ ___/ ___/ ___/ __ \/ ___/ _ \  / __ \/ __ \/ __ \
+// / /_/ / / / / /_/ /  __/ /  (__  ) /__/ /_/ / /  /  __/ / /_/ / / / / /_/ /
+// \____/_/ /_/\__,_/\___/_/  /____/\___/\____/_/   \___(_) .___/_/ /_/ .___/
+//                                                       /_/         /_/
+//
+// Build Version: <?=Underscore::VERSION."\n"?>
+// Last Update:   <?=date('r')."\n"?>
+//
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+<?php foreach ($methods as $name => $method) : ?>
+function _<?=$method->name?>(...$args)
+{
+    return Underscore\Underscore::<?=$method->reflect->name?>(...$args);
+}
+
+<?php endforeach ?>

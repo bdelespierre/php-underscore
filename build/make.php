@@ -1,7 +1,6 @@
 <?php
 
-require_once dirname(__DIR__) . "/src/Underscore/Underscore.php";
-require_once dirname(__DIR__) . "/src/Underscore/Bridge.php";
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Underscore\Underscore as _;
 

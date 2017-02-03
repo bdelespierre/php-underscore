@@ -1,4 +1,5 @@
 <?php
+
 //    __  __          __                                            __
 //   / / / /___  ____/ /__  ___________________  ________    ____  / /_  ____
 //  / / / / __ \/ __  / _ \/ ___/ ___/ ___/ __ \/ ___/ _ \  / __ \/ __ \/ __ \
@@ -6,558 +7,699 @@
 // \____/_/ /_/\__,_/\___/_/  /____/\___/\____/_/   \___(_) .___/_/ /_/ .___/
 //                                                       /_/         /_/
 //
-// Build Version: 0.2.0
-// Last Update:   Fri, 14 Aug 2015 15:42:35 +0200
+// Build Version: 0.3.0
+// Last Update:   Fri, 03 Feb 2017 16:53:23 +0100
 //
 
-require_once __DIR__ . '/Underscore/Underscore.php';
-require_once __DIR__ . '/Underscore/Bridge.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-use Underscore\Underscore;
-use Underscore\Bridge;
+function _each(...$args)
+{
+    return Underscore\Underscore::each(...$args);
+}
+
+function _break(...$args)
+{
+    return Underscore\Underscore::break(...$args);
+}
+
+function _continue(...$args)
+{
+    return Underscore\Underscore::continue(...$args);
+}
+
+function _walk(...$args)
+{
+    return Underscore\Underscore::walk(...$args);
+}
+
+function _each_reference(...$args)
+{
+    return Underscore\Underscore::eachReference(...$args);
+}
+
+function _walk_recursive(...$args)
+{
+    return Underscore\Underscore::walkRecursive(...$args);
+}
+
+function _each_reference_recursive(...$args)
+{
+    return Underscore\Underscore::eachReferenceRecursive(...$args);
+}
+
+function _collect(...$args)
+{
+    return Underscore\Underscore::collect(...$args);
+}
+
+function _map(...$args)
+{
+    return Underscore\Underscore::map(...$args);
+}
+
+function _inject(...$args)
+{
+    return Underscore\Underscore::inject(...$args);
+}
+
+function _foldl(...$args)
+{
+    return Underscore\Underscore::foldl(...$args);
+}
+
+function _reduce(...$args)
+{
+    return Underscore\Underscore::reduce(...$args);
+}
+
+function _foldr(...$args)
+{
+    return Underscore\Underscore::foldr(...$args);
+}
+
+function _reduce_right(...$args)
+{
+    return Underscore\Underscore::reduceRight(...$args);
+}
+
+function _detect(...$args)
+{
+    return Underscore\Underscore::detect(...$args);
+}
+
+function _find(...$args)
+{
+    return Underscore\Underscore::find(...$args);
+}
+
+function _select(...$args)
+{
+    return Underscore\Underscore::select(...$args);
+}
+
+function _filter(...$args)
+{
+    return Underscore\Underscore::filter(...$args);
+}
+
+function _where(...$args)
+{
+    return Underscore\Underscore::where(...$args);
+}
+
+function _find_where(...$args)
+{
+    return Underscore\Underscore::findWhere(...$args);
+}
+
+function _reject(...$args)
+{
+    return Underscore\Underscore::reject(...$args);
+}
+
+function _all(...$args)
+{
+    return Underscore\Underscore::all(...$args);
+}
+
+function _every(...$args)
+{
+    return Underscore\Underscore::every(...$args);
+}
+
+function _any(...$args)
+{
+    return Underscore\Underscore::any(...$args);
+}
+
+function _some(...$args)
+{
+    return Underscore\Underscore::some(...$args);
+}
+
+function _includes(...$args)
+{
+    return Underscore\Underscore::includes(...$args);
+}
+
+function _contains(...$args)
+{
+    return Underscore\Underscore::contains(...$args);
+}
+
+function _invoke(...$args)
+{
+    return Underscore\Underscore::invoke(...$args);
+}
+
+function _pluck(...$args)
+{
+    return Underscore\Underscore::pluck(...$args);
+}
 
-function _each($list, $iterator, $context=NULL)
+function _max(...$args)
 {
-	return Underscore::each($list, $iterator, $context);
+    return Underscore\Underscore::max(...$args);
 }
 
-function _eachReference(&$list, $iterator, $context=NULL)
+function _min(...$args)
 {
-	return Underscore::eachReference($list, $iterator, $context);
+    return Underscore\Underscore::min(...$args);
 }
 
-function _map($list, $iterator, $context=NULL)
+function _sort_by(...$args)
 {
-	return Underscore::map($list, $iterator, $context);
+    return Underscore\Underscore::sortBy(...$args);
 }
 
-function _reduce($list, $iterator, $memo, $context=NULL)
+function _index_by(...$args)
 {
-	return Underscore::reduce($list, $iterator, $memo, $context);
+    return Underscore\Underscore::indexBy(...$args);
 }
 
-function _reduceRight($list, $iterator, $memo, $context=NULL)
+function _group_by(...$args)
 {
-	return Underscore::reduceRight($list, $iterator, $memo, $context);
+    return Underscore\Underscore::groupBy(...$args);
 }
 
-function _find($list, $iterator, $context=NULL)
+function _count_by(...$args)
 {
-	return Underscore::find($list, $iterator, $context);
+    return Underscore\Underscore::countBy(...$args);
 }
 
-function _filter($list, $iterator=NULL, $context=NULL)
+function _shuffle(...$args)
 {
-	return Underscore::filter($list, $iterator, $context);
+    return Underscore\Underscore::shuffle(...$args);
 }
 
-function _where($list, $properties)
+function _sample(...$args)
 {
-	return Underscore::where($list, $properties);
+    return Underscore\Underscore::sample(...$args);
 }
 
-function _findWhere($list, $properties)
+function _to_array(...$args)
 {
-	return Underscore::findWhere($list, $properties);
+    return Underscore\Underscore::toArray(...$args);
 }
 
-function _reject($list, $iterator, $context=NULL)
+function _size(...$args)
 {
-	return Underscore::reject($list, $iterator, $context);
+    return Underscore\Underscore::size(...$args);
 }
 
-function _every($list, $iterator=NULL, $context=NULL)
+function _partition(...$args)
 {
-	return Underscore::every($list, $iterator, $context);
+    return Underscore\Underscore::partition(...$args);
 }
 
-function _some($list, $iterator=NULL, $context=NULL)
+function _head(...$args)
 {
-	return Underscore::some($list, $iterator, $context);
+    return Underscore\Underscore::head(...$args);
 }
 
-function _contains($list, $value, $strict=false)
+function _take(...$args)
 {
-	return Underscore::contains($list, $value, $strict);
+    return Underscore\Underscore::take(...$args);
 }
 
-function _invoke($list, $methodName, $arguments=[])
+function _first(...$args)
 {
-	return Underscore::invoke($list, $methodName, $arguments);
+    return Underscore\Underscore::first(...$args);
 }
 
-function _pluck($list, $propertyName)
+function _initial(...$args)
 {
-	return Underscore::pluck($list, $propertyName);
+    return Underscore\Underscore::initial(...$args);
 }
 
-function _max($list, $iterator=NULL, $context=NULL)
+function _last(...$args)
 {
-	return Underscore::max($list, $iterator, $context);
+    return Underscore\Underscore::last(...$args);
 }
 
-function _min($list, $iterator=NULL, $context=NULL)
+function _tail(...$args)
 {
-	return Underscore::min($list, $iterator, $context);
+    return Underscore\Underscore::tail(...$args);
 }
 
-function _sortBy($list, $iterator, $context=NULL)
+function _drop(...$args)
 {
-	return Underscore::sortBy($list, $iterator, $context);
+    return Underscore\Underscore::drop(...$args);
 }
 
-function _indexBy($list, $iterator, $context=NULL)
+function _rest(...$args)
 {
-	return Underscore::indexBy($list, $iterator, $context);
+    return Underscore\Underscore::rest(...$args);
 }
 
-function _groupBy($list, $iterator, $context=NULL)
+function _compact(...$args)
 {
-	return Underscore::groupBy($list, $iterator, $context);
+    return Underscore\Underscore::compact(...$args);
 }
 
-function _countBy($list, $iterator, $context=NULL)
+function _flatten(...$args)
 {
-	return Underscore::countBy($list, $iterator, $context);
+    return Underscore\Underscore::flatten(...$args);
 }
 
-function _shuffle($list)
+function _without(...$args)
 {
-	return Underscore::shuffle($list);
+    return Underscore\Underscore::without(...$args);
 }
 
-function _sample($list, $n=1)
+function _unique(...$args)
 {
-	return Underscore::sample($list, $n);
+    return Underscore\Underscore::unique(...$args);
 }
 
-function _toArray($list)
+function _uniq(...$args)
 {
-	return Underscore::toArray($list);
+    return Underscore\Underscore::uniq(...$args);
 }
 
-function _size($list)
+function _union(...$args)
 {
-	return Underscore::size($list);
+    return Underscore\Underscore::union(...$args);
 }
 
-function _partition($list, $iterator, $context=NULL)
+function _intersection(...$args)
 {
-	return Underscore::partition($list, $iterator, $context);
+    return Underscore\Underscore::intersection(...$args);
 }
 
-function _first($array, $n=1, $guard=false)
+function _difference(...$args)
 {
-	return Underscore::first($array, $n, $guard);
+    return Underscore\Underscore::difference(...$args);
 }
 
-function _initial($array, $n=1, $guard=false)
+function _zip(...$args)
 {
-	return Underscore::initial($array, $n, $guard);
+    return Underscore\Underscore::zip(...$args);
 }
 
-function _last($array, $n=1, $guard=false)
+function _obj(...$args)
 {
-	return Underscore::last($array, $n, $guard);
+    return Underscore\Underscore::obj(...$args);
 }
 
-function _rest($array, $index=1, $guard=false)
+function _index_of(...$args)
 {
-	return Underscore::rest($array, $index, $guard);
+    return Underscore\Underscore::indexOf(...$args);
 }
 
-function _compact($array)
+function _last_index_of(...$args)
 {
-	return Underscore::compact($array);
+    return Underscore\Underscore::lastIndexOf(...$args);
 }
 
-function _flatten($array, $shallow=false)
+function _sorted_index(...$args)
 {
-	return Underscore::flatten($array, $shallow);
+    return Underscore\Underscore::sortedIndex(...$args);
 }
 
-function _without($array, $values)
+function _range(...$args)
 {
-	return Underscore::without($array, $values);
+    return Underscore\Underscore::range(...$args);
 }
 
-function _uniq($array, $isSorted=false, $iterator=NULL, $context=NULL)
+function _xrange(...$args)
 {
-	return Underscore::uniq($array, $isSorted, $iterator, $context);
+    return Underscore\Underscore::xrange(...$args);
 }
 
-function _union()
+function _wrap(...$args)
 {
-	return Underscore::union();
+    return Underscore\Underscore::wrap(...$args);
 }
 
-function _intersection($array)
+function _negate(...$args)
 {
-	return Underscore::intersection($array);
+    return Underscore\Underscore::negate(...$args);
 }
 
-function _difference($array)
+function _compose(...$args)
 {
-	return Underscore::difference($array);
+    return Underscore\Underscore::compose(...$args);
 }
 
-function _zip()
+function _after(...$args)
 {
-	return Underscore::zip();
+    return Underscore\Underscore::after(...$args);
 }
 
-function _obj($list, $values=NULL)
+function _before(...$args)
 {
-	return Underscore::obj($list, $values);
+    return Underscore\Underscore::before(...$args);
 }
 
-function _indexOf($array, $item)
+function _once(...$args)
 {
-	return Underscore::indexOf($array, $item);
+    return Underscore\Underscore::once(...$args);
 }
 
-function _lastIndexOf($array, $item)
+function _partial(...$args)
 {
-	return Underscore::lastIndexOf($array, $item);
+    return Underscore\Underscore::partial(...$args);
 }
 
-function _sortedIndex($array, $value, $iterator=NULL, $context=NULL)
+function _bind(...$args)
 {
-	return Underscore::sortedIndex($array, $value, $iterator, $context);
+    return Underscore\Underscore::bind(...$args);
 }
 
-function _range($start, $stop=NULL, $step=1)
+function _bind_class(...$args)
 {
-	return Underscore::range($start, $stop, $step);
+    return Underscore\Underscore::bindClass(...$args);
 }
 
-function _wrap($function, $wrapper)
+function _bind_all(...$args)
 {
-	return Underscore::wrap($function, $wrapper);
+    return Underscore\Underscore::bindAll(...$args);
 }
 
-function _negate($function)
+function _memoize(...$args)
 {
-	return Underscore::negate($function);
+    return Underscore\Underscore::memoize(...$args);
 }
 
-function _compose($functions)
+function _throttle(...$args)
 {
-	return Underscore::compose($functions);
+    return Underscore\Underscore::throttle(...$args);
 }
 
-function _after($count, $function)
+function _call(...$args)
 {
-	return Underscore::after($count, $function);
+    return Underscore\Underscore::call(...$args);
 }
 
-function _before($count, $function)
+function _apply(...$args)
 {
-	return Underscore::before($count, $function);
+    return Underscore\Underscore::apply(...$args);
 }
 
-function _once($function)
+function _keys(...$args)
 {
-	return Underscore::once($function);
+    return Underscore\Underscore::keys(...$args);
 }
 
-function _partial($function, $arguments)
+function _values(...$args)
 {
-	return Underscore::partial($function, $arguments);
+    return Underscore\Underscore::values(...$args);
 }
 
-function _bind($function, $object)
+function _pairs(...$args)
 {
-	return Underscore::bind($function, $object);
+    return Underscore\Underscore::pairs(...$args);
 }
 
-function _bindClass($function, $class)
+function _invert(...$args)
 {
-	return Underscore::bindClass($function, $class);
+    return Underscore\Underscore::invert(...$args);
 }
 
-function _bindAll($object, $methodNames)
+function _methods(...$args)
 {
-	return Underscore::bindAll($object, $methodNames);
+    return Underscore\Underscore::methods(...$args);
 }
 
-function _memoize($function, $hashFunction=NULL, &$cache=NULL)
+function _functions(...$args)
 {
-	return Underscore::memoize($function, $hashFunction, $cache);
+    return Underscore\Underscore::functions(...$args);
 }
 
-function _throttle($function, $wait)
+function _extend(...$args)
 {
-	return Underscore::throttle($function, $wait);
+    return Underscore\Underscore::extend(...$args);
 }
 
-function _call($function, $context=NULL)
+function _pick(...$args)
 {
-	return Underscore::call($function, $context);
+    return Underscore\Underscore::pick(...$args);
 }
 
-function _apply($function, $context=NULL, $arguments=[])
+function _omit(...$args)
 {
-	return Underscore::apply($function, $context, $arguments);
+    return Underscore\Underscore::omit(...$args);
 }
 
-function _keys($object)
+function _defaults(...$args)
 {
-	return Underscore::keys($object);
+    return Underscore\Underscore::defaults(...$args);
 }
 
-function _values($object)
+function _copy(...$args)
 {
-	return Underscore::values($object);
+    return Underscore\Underscore::copy(...$args);
 }
 
-function _pairs($object)
+function _duplicate(...$args)
 {
-	return Underscore::pairs($object);
+    return Underscore\Underscore::duplicate(...$args);
 }
 
-function _invert($object)
+function _tap(...$args)
 {
-	return Underscore::invert($object);
+    return Underscore\Underscore::tap(...$args);
 }
 
-function _functions($object)
+function _has(...$args)
 {
-	return Underscore::functions($object);
+    return Underscore\Underscore::has(...$args);
 }
 
-function _extend($destination, $sources)
+function _property(...$args)
 {
-	return Underscore::extend($destination, $sources);
+    return Underscore\Underscore::property(...$args);
 }
 
-function _pick($object, $keys)
+function _matches(...$args)
 {
-	return Underscore::pick($object, $keys);
+    return Underscore\Underscore::matches(...$args);
 }
 
-function _omit($object, $keys)
+function _get(...$args)
 {
-	return Underscore::omit($object, $keys);
+    return Underscore\Underscore::get(...$args);
 }
 
-function _defaults($object, $defaults)
+function _set(...$args)
 {
-	return Underscore::defaults($object, $defaults);
+    return Underscore\Underscore::set(...$args);
 }
 
-function _duplicate($object)
+function _is(...$args)
 {
-	return Underscore::duplicate($object);
+    return Underscore\Underscore::is(...$args);
 }
 
-function _tap($object, $interceptor)
+function _is_equal(...$args)
 {
-	return Underscore::tap($object, $interceptor);
+    return Underscore\Underscore::isEqual(...$args);
 }
 
-function _has($object, $key)
+function _is_empty(...$args)
 {
-	return Underscore::has($object, $key);
+    return Underscore\Underscore::isEmpty(...$args);
 }
 
-function _property($key)
+function _is_array(...$args)
 {
-	return Underscore::property($key);
+    return Underscore\Underscore::isArray(...$args);
 }
 
-function _matches($properties)
+function _is_object(...$args)
 {
-	return Underscore::matches($properties);
+    return Underscore\Underscore::isObject(...$args);
 }
 
-function _get($object, $key, $default=NULL)
+function _is_function(...$args)
 {
-	return Underscore::get($object, $key, $default);
+    return Underscore\Underscore::isFunction(...$args);
 }
 
-function _set(&$object, $key, $value)
+function _is_num(...$args)
 {
-	return Underscore::set($object, $key, $value);
+    return Underscore\Underscore::isNum(...$args);
 }
 
-function _is($object, $types)
+function _is_numeric(...$args)
 {
-	return Underscore::is($object, $types);
+    return Underscore\Underscore::isNumeric(...$args);
 }
 
-function _isEqual($object, $other)
+function _is_number(...$args)
 {
-	return Underscore::isEqual($object, $other);
+    return Underscore\Underscore::isNumber(...$args);
 }
 
-function _isEmpty($object)
+function _is_int(...$args)
 {
-	return Underscore::isEmpty($object);
+    return Underscore\Underscore::isInt(...$args);
 }
 
-function _isArray($object, $native=false)
+function _is_integer(...$args)
 {
-	return Underscore::isArray($object, $native);
+    return Underscore\Underscore::isInteger(...$args);
 }
 
-function _isObject($object)
+function _is_float(...$args)
 {
-	return Underscore::isObject($object);
+    return Underscore\Underscore::isFloat(...$args);
 }
 
-function _isFunction($object)
+function _is_string(...$args)
 {
-	return Underscore::isFunction($object);
+    return Underscore\Underscore::isString(...$args);
 }
 
-function _isNumber($object, $native=false)
+function _is_date(...$args)
 {
-	return Underscore::isNumber($object, $native);
+    return Underscore\Underscore::isDate(...$args);
 }
 
-function _isInteger($object, $native=false)
+function _is_regexp(...$args)
 {
-	return Underscore::isInteger($object, $native);
+    return Underscore\Underscore::isRegExp(...$args);
 }
 
-function _isFloat($object, $native=false)
+function _is_finite(...$args)
 {
-	return Underscore::isFloat($object, $native);
+    return Underscore\Underscore::isFinite(...$args);
 }
 
-function _isString($object, $native=false)
+function _is_nan(...$args)
 {
-	return Underscore::isString($object, $native);
+    return Underscore\Underscore::isNaN(...$args);
 }
 
-function _isDate($object)
+function _is_bool(...$args)
 {
-	return Underscore::isDate($object);
+    return Underscore\Underscore::isBool(...$args);
 }
 
-function _isRegExp($object)
+function _is_boolean(...$args)
 {
-	return Underscore::isRegExp($object);
+    return Underscore\Underscore::isBoolean(...$args);
 }
 
-function _isFinite($object)
+function _is_null(...$args)
 {
-	return Underscore::isFinite($object);
+    return Underscore\Underscore::isNull(...$args);
 }
 
-function _isNaN($object)
+function _is_scalar(...$args)
 {
-	return Underscore::isNaN($object);
+    return Underscore\Underscore::isScalar(...$args);
 }
 
-function _isBoolean($object, $native=false)
+function _is_traversable(...$args)
 {
-	return Underscore::isBoolean($object, $native);
+    return Underscore\Underscore::isTraversable(...$args);
 }
 
-function _isNull($object)
+function _is_iterable(...$args)
 {
-	return Underscore::isNull($object);
+    return Underscore\Underscore::isIterable(...$args);
 }
 
-function _isScalar($object, $native=false)
+function _is_resource(...$args)
 {
-	return Underscore::isScalar($object, $native);
+    return Underscore\Underscore::isResource(...$args);
 }
 
-function _isTraversable($object)
+function _get_type(...$args)
 {
-	return Underscore::isTraversable($object);
+    return Underscore\Underscore::getType(...$args);
 }
 
-function _isResource($object)
+function _type_of(...$args)
 {
-	return Underscore::isResource($object);
+    return Underscore\Underscore::typeOf(...$args);
 }
 
-function _typeOf($object, $class=true)
+function _identity(...$args)
 {
-	return Underscore::typeOf($object, $class);
+    return Underscore\Underscore::identity(...$args);
 }
 
-function _identity($value)
+function _constant(...$args)
 {
-	return Underscore::identity($value);
+    return Underscore\Underscore::constant(...$args);
 }
 
-function _constant($value)
+function _noop(...$args)
 {
-	return Underscore::constant($value);
+    return Underscore\Underscore::noop(...$args);
 }
 
-function _noop()
+function _times(...$args)
 {
-	return Underscore::noop();
+    return Underscore\Underscore::times(...$args);
 }
 
-function _times($n, $iterator, $context=NULL)
+function _random(...$args)
 {
-	return Underscore::times($n, $iterator, $context);
+    return Underscore\Underscore::random(...$args);
 }
 
-function _random($min, $max=NULL)
+function _mixin(...$args)
 {
-	return Underscore::random($min, $max);
+    return Underscore\Underscore::mixin(...$args);
 }
 
-function _mixin($functions)
+function _provide(...$args)
 {
-	return Underscore::mixin($functions);
+    return Underscore\Underscore::provide(...$args);
 }
 
-function _provide($method)
+function _unique_id(...$args)
 {
-	return Underscore::provide($method);
+    return Underscore\Underscore::uniqueId(...$args);
 }
 
-function _uniqueId($prefix='')
+function _escape(...$args)
 {
-	return Underscore::uniqueId($prefix);
+    return Underscore\Underscore::escape(...$args);
 }
 
-function _escape($string)
+function _unescape(...$args)
 {
-	return Underscore::escape($string);
+    return Underscore\Underscore::unescape(...$args);
 }
 
-function _unescape($string)
+function _result(...$args)
 {
-	return Underscore::unescape($string);
+    return Underscore\Underscore::result(...$args);
 }
 
-function _result($object, $property)
+function _lastly(...$args)
 {
-	return Underscore::result($object, $property);
+    return Underscore\Underscore::lastly(...$args);
 }
 
-function _lastly($function, $finally, $context=NULL)
+function _now(...$args)
 {
-	return Underscore::lastly($function, $finally, $context);
+    return Underscore\Underscore::now(...$args);
 }
 
-function _now()
+function _template(...$args)
 {
-	return Underscore::now();
+    return Underscore\Underscore::template(...$args);
 }
 
-function _template($templateString, $data=[], $settings=[])
+function _chain(...$args)
 {
-	return Underscore::template($templateString, $data, $settings);
+    return Underscore\Underscore::chain(...$args);
 }
 
-function _chain($object)
+function _strategy(...$args)
 {
-	return Underscore::chain($object);
+    return Underscore\Underscore::strategy(...$args);
 }
 
-function _forge($classname)
+function _forge(...$args)
 {
-	return Underscore::forge($classname);
+    return Underscore\Underscore::forge(...$args);
 }
 
