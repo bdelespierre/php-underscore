@@ -71,6 +71,11 @@ function _every($list, $iterator=NULL, $context=NULL)
 	return Underscore::every($list, $iterator, $context);
 }
 
+function _any($list, $iterator=NULL, $context=NULL)
+{
+	return Underscore::some($list, $iterator, $context);
+}
+
 function _some($list, $iterator=NULL, $context=NULL)
 {
 	return Underscore::some($list, $iterator, $context);
